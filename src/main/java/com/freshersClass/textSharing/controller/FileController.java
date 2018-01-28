@@ -29,20 +29,22 @@ public class FileController {
     Date date = new Date();
 
     @RequestMapping(method = RequestMethod.POST, value = "/create")
-    public boolean createFile(@RequestBody File file) {
+    public String createFile(@RequestBody File file) {
 
         file.setDateCreation(new Timestamp(date.getTime()));
         System.out.println(" *** SHA *** : " + generateUrl(file.getContent()));
         System.out.println("Contenido: " + file.getContent() + "Hora: " + file.getDateCreation());
         // fileService.createFile(file);
         Version version = createVersion(file);
-        versionService.saveVersion(version);
-        return true;
+        // versionService.saveVersion(version);
+        return "estaeslaSHA976976767ds6f7d6767";
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/open")
-    public String openFile(@RequestBody String url) {
-        return versionService.openUrl(url).getContent();
+    @RequestMapping(method = RequestMethod.POST, value = "/search")
+    public void openFile(@RequestBody Version version) {
+        System.out.println(" URL : " + version.getUrl());
+        String verFind = versionService.openUrl(version.getUrl());
+         System.out.println(" CONTENIDO URL : " + verFind);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/edit")

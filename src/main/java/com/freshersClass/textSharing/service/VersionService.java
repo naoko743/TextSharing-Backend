@@ -14,8 +14,8 @@ public interface VersionService {
     /**
      *
      * @param url
-     * @return
+     * @return Feld Content for Version
      */
-    Version openUrl(String url);
+    String openUrl(String url);
 
 }

@@ -18,7 +18,7 @@ public class VersionServiceImpl implements VersionService {
     }
 
     @Override
-    public Version openUrl(String url) {
-        return versionRepository.findByUrl(url);
+    public String openUrl(String url) {
+         return versionRepository.findByUrl(url);
     }
 }
