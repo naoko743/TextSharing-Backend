@@ -16,8 +16,6 @@ import javax.persistence.TemporalType;
 public class File {
 
     private Long idfile;
-
-    @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreation;
     private String content;
 
@@ -39,6 +37,7 @@ public class File {
         this.idfile = idfile;
     }
 
+    @Column(name = "datecreation")
     public Date getDateCreation() {
         return dateCreation;
     }

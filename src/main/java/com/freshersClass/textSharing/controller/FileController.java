@@ -1,5 +1,8 @@
 package com.freshersClass.textSharing.controller;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +26,13 @@ public class FileController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/create")
     public boolean createFile(@RequestBody File file) {
-        System.out.println("Contenido: " + file.getContent() + " Date: " + file.getDateCreation());
 
-       // fileService.createFile(file);
-       // versionService.saveVersion(createVersion(file));
+        Date date = new Date();
+        file.setDateCreation(new Timestamp(date.getTime()));
+
+        System.out.println("Contenido: " + file.getContent() + "Hora: " + file.getDateCreation() );
+        fileService.createFile(file);
+        // versionService.saveVersion(createVersion(file));
         return true;
     }
 
@@ -41,7 +47,7 @@ public class FileController {
         return true;
     }
 
-    private Version createVersion(File file){
+    private Version createVersion(File file) {
         Version version = new Version();
         version.setContent(file.getContent());
         //version.setDate();
@@ -50,7 +56,7 @@ public class FileController {
         return version;
     }
 
-    private String generateUrl(String content){
+    private String generateUrl(String content) {
 
         //TODO Generar URL con SHA
         return "";
