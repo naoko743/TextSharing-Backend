@@ -8,8 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "version", schema = "textsharing")
@@ -17,8 +15,6 @@ public class Version {
 
     private Long idversion;
     private String content;
-
-    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     private String url;
     private int numberVersion;

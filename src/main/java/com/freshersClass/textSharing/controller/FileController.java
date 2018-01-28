@@ -1,5 +1,6 @@
 package com.freshersClass.textSharing.controller;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -13,6 +14,7 @@ import com.freshersClass.textSharing.entity.File;
 import com.freshersClass.textSharing.entity.Version;
 import com.freshersClass.textSharing.service.FileService;
 import com.freshersClass.textSharing.service.VersionService;
+import com.google.common.hash.Hashing;
 
 @RestController
 @RequestMapping("/file")
@@ -24,15 +26,17 @@ public class FileController {
     @Autowired
     VersionService versionService;
 
+    Date date = new Date();
+
     @RequestMapping(method = RequestMethod.POST, value = "/create")
     public boolean createFile(@RequestBody File file) {
 
-        Date date = new Date();
         file.setDateCreation(new Timestamp(date.getTime()));
-
-        System.out.println("Contenido: " + file.getContent() + "Hora: " + file.getDateCreation() );
-        fileService.createFile(file);
-        // versionService.saveVersion(createVersion(file));
+        System.out.println(" *** SHA *** : " + generateUrl(file.getContent()));
+        System.out.println("Contenido: " + file.getContent() + "Hora: " + file.getDateCreation());
+        // fileService.createFile(file);
+        Version version = createVersion(file);
+        versionService.saveVersion(version);
         return true;
     }
 
@@ -50,16 +54,23 @@ public class FileController {
     private Version createVersion(File file) {
         Version version = new Version();
         version.setContent(file.getContent());
-        //version.setDate();
-        //version.setUrl();
+        version.setDate(new Timestamp(date.getTime()));
+        version.setNumberVersion(1);
         version.setUrl(generateUrl(file.getContent()));
         return version;
     }
 
+    /**
+     *
+     * @param content
+     * @return SHA256 Google Guava Library
+     */
     private String generateUrl(String content) {
 
-        //TODO Generar URL con SHA
-        return "";
+        String sha256hex = Hashing.sha256()
+                .hashString(content, StandardCharsets.UTF_8)
+                .toString();
+        return sha256hex;
     }
 
 }
