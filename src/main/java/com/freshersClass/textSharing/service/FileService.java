@@ -12,4 +12,7 @@ public interface FileService {
     File createFile(File file);
 
 
+    File findVersionById(Long idFile);
+
+
 }

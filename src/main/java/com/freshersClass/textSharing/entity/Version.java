@@ -7,32 +7,34 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "version", schema = "textsharing")
 public class Version {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idversion;
     private String content;
     private Date date;
     private String url;
     private int numberVersion;
+    @ManyToOne
+    @JoinColumn(name = "iduser")
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "idfile")
+    private File file;
 
     public Version() {
     }
 
-    public Version(String content, Date date, String url, int numberVersion) {
-        this.content = content;
-        this.date = date;
-        this.url = url;
-        this.numberVersion = numberVersion;
-    }
 
-    @Id
-    @Column(name = "idversion")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getIdversion() {
         return idversion;
     }
@@ -73,10 +75,21 @@ public class Version {
         this.numberVersion = numberVersion;
     }
 
-    @Override
-    public String toString() {
-        return String.format(
-                "Version[id=%d, content='%s', date='%s', url='%s', numberVersion='%s']",
-                idversion, content, date, url, numberVersion);
+    public File getFile() {
+        return file;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setFile(File file) {
+        this.file = file;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
+
+

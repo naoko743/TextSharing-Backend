@@ -12,11 +12,15 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "file", schema = "textsharing")
 public class File {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idfile;
+
+    @Column(name = "datecreation")
     private Date dateCreation;
+
     private String content;
 
     protected File() {
@@ -26,9 +30,7 @@ public class File {
         this.content = content;
     }
 
-    @Id
-    @Column(name = "idfile")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     public Long getIdfile() {
         return idfile;
     }
@@ -37,7 +39,6 @@ public class File {
         this.idfile = idfile;
     }
 
-    @Column(name = "datecreation")
     public Date getDateCreation() {
         return dateCreation;
     }
@@ -54,10 +55,4 @@ public class File {
         this.content = content;
     }
 
-    @Override
-    public String toString() {
-        return String.format(
-                "File[id=%d, dateCreation='%s', content='%s']",
-                idfile, dateCreation, content);
-    }
 }

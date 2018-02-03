@@ -27,4 +27,16 @@ public class UserServiceImpl implements UserService {
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    @Override public User findUserById(Long id) {
+        return userRepository.findOne(id);
+    }
+
+    @Override public User login(String username, String password) {
+        User user = getUserByUsername(username);
+        if(user != null && user.getPassword().equals(password)){
+            return user;
+        }
+        return null;
+    }
 }

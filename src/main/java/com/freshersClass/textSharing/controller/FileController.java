@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.freshersClass.textSharing.entity.File;
+import com.freshersClass.textSharing.entity.User;
 import com.freshersClass.textSharing.entity.Version;
 import com.freshersClass.textSharing.service.FileService;
+import com.freshersClass.textSharing.service.UserService;
 import com.freshersClass.textSharing.service.VersionService;
 import com.google.common.hash.Hashing;
 
@@ -26,25 +28,25 @@ public class FileController {
     @Autowired
     VersionService versionService;
 
+    @Autowired
+    UserService userService;
+
     Date date = new Date();
 
     @RequestMapping(method = RequestMethod.POST, value = "/create")
-    public String createFile(@RequestBody File file) {
+    public Version createFile(@RequestBody File file) {
 
         file.setDateCreation(new Timestamp(date.getTime()));
         System.out.println(" *** SHA *** : " + generateUrl(file.getContent()));
         System.out.println("Contenido: " + file.getContent() + "Hora: " + file.getDateCreation());
-        // fileService.createFile(file);
-        Version version = createVersion(file);
-        // versionService.saveVersion(version);
-        return "estaeslaSHA976976767ds6f7d6767";
+        File newFile = fileService.createFile(file);
+        Version version = createVersion(newFile);
+        return versionService.saveVersion(version);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/search")
-    public void openFile(@RequestBody Version version) {
-        System.out.println(" URL : " + version.getUrl());
-        String verFind = versionService.openUrl(version.getUrl());
-         System.out.println(" CONTENIDO URL : " + verFind);
+    public Version openFile(@RequestBody String url) {
+        return versionService.openUrl(url);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/edit")
@@ -59,11 +61,12 @@ public class FileController {
         version.setDate(new Timestamp(date.getTime()));
         version.setNumberVersion(1);
         version.setUrl(generateUrl(file.getContent()));
+        version.setFile(fileService.findVersionById(file.getIdfile()));
+        version.setUser(userService.findUserById(2L));
         return version;
     }
 
     /**
-     *
      * @param content
      * @return SHA256 Google Guava Library
      */

@@ -7,5 +7,4 @@ import com.freshersClass.textSharing.entity.File;
 public interface FileRepository extends CrudRepository<File, Long> {
 
 
-
 }

@@ -8,14 +8,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-@Table(name = "user", schema = "textsharing")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long iduser;
+
     private String username;
+
+    @JsonIgnore
     private String password;
+
     private String name;
 
     public User() {
@@ -27,16 +33,6 @@ public class User {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return String.format(
-                "User[id=%d, username='%s', password='%s', v='%s']",
-                iduser, username, name);
-    }
-
-    @Id
-    @Column(name = "iduser")
-    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getIduser() {
         return iduser;
     }

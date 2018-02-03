@@ -16,4 +16,9 @@ public class FileServiceImpl implements FileService {
     public File createFile(File file) {
         return fileRepository.save(file);
     }
+
+    @Override
+    public File findVersionById(Long idFile) {
+        return fileRepository.findOne(idFile);
+    }
 }
