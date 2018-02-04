@@ -23,6 +23,8 @@ public class Version {
     private String content;
     private Date date;
     private String url;
+
+    @Column(name = "numberversion")
     private int numberVersion;
     @ManyToOne
     @JoinColumn(name = "iduser")
