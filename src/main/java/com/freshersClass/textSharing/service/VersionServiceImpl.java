@@ -21,4 +21,9 @@ public class VersionServiceImpl implements VersionService {
     public Version openUrl(String url) {
         return versionRepository.findByUrl(url);
     }
+
+    @Override
+    public Integer findNumberOfVersion(Long idfile) {
+        return versionRepository.findVersionById(idfile);
+    }
 }

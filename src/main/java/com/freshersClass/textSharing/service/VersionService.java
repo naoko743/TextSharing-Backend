@@ -16,4 +16,6 @@ public interface VersionService {
      */
     Version openUrl(String url);
 
+    Integer findNumberOfVersion(Long idfile);
+
 }

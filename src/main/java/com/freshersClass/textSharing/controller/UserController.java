@@ -28,7 +28,6 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST, value = "/findAll")
     public List<User> findAll() {
         List<User> userList = userService.getAllUser();
-        System.out.println("List User size: " +userList.size());
         return userService.getAllUser();
     }
 

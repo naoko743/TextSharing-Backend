@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.freshersClass.textSharing.entity.File;
-import com.freshersClass.textSharing.entity.User;
 import com.freshersClass.textSharing.entity.Version;
 import com.freshersClass.textSharing.service.FileService;
 import com.freshersClass.textSharing.service.UserService;
@@ -37,8 +36,6 @@ public class FileController {
     public Version createFile(@RequestBody File file) {
 
         file.setDateCreation(new Timestamp(date.getTime()));
-        System.out.println(" *** SHA *** : " + generateUrl(file.getContent()));
-        System.out.println("Contenido: " + file.getContent() + "Hora: " + file.getDateCreation());
         File newFile = fileService.createFile(file);
         Version version = createVersion(newFile);
         return versionService.saveVersion(version);
@@ -46,13 +43,20 @@ public class FileController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/search")
     public Version openFile(@RequestBody String url) {
-        return versionService.openUrl(url);
+        Version version = versionService.openUrl(url);
+        return version != null ? version : new Version();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/edit")
-    public boolean editFile(@RequestBody Version version) {
-        versionService.saveVersion(version);
-        return true;
+    public Version editFile(@RequestBody Version version) {
+        Version updateVersion = new Version();
+        updateVersion.setNumberVersion(updateVersion(version.getFile().getIdfile()));
+        updateVersion.setContent(version.getContent());
+        updateVersion.setDate(new Timestamp(date.getTime()));
+        updateVersion.setUser(userService.findUserById(2L));
+        updateVersion.setUrl(generateUrl(version.getContent()));
+        updateVersion.setFile(version.getFile());
+        return versionService.saveVersion(updateVersion);
     }
 
     private Version createVersion(File file) {
@@ -76,6 +80,10 @@ public class FileController {
                 .hashString(content, StandardCharsets.UTF_8)
                 .toString();
         return sha256hex;
+    }
+
+    private Integer updateVersion(Long idFile){
+        return versionService.findNumberOfVersion(idFile) + 1;
     }
 
 }
