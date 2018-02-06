@@ -24,7 +24,7 @@ public interface UserService {
      * @param username
      * @return user instance
      */
-    User getUserByUsername(String username);
+    User findUserByUsername(String username);
 
     User findUserById(Long id);
 

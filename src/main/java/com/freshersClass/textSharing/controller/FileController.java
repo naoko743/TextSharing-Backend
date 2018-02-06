@@ -5,12 +5,14 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.freshersClass.textSharing.entity.File;
+import com.freshersClass.textSharing.entity.User;
 import com.freshersClass.textSharing.entity.Version;
 import com.freshersClass.textSharing.service.FileService;
 import com.freshersClass.textSharing.service.UserService;
@@ -48,15 +50,17 @@ public class FileController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/edit")
-    public Version editFile(@RequestBody Version version) {
-        Version updateVersion = new Version();
-        updateVersion.setNumberVersion(updateVersion(version.getFile().getIdfile()));
-        updateVersion.setContent(version.getContent());
-        updateVersion.setDate(new Timestamp(date.getTime()));
-        updateVersion.setUser(userService.findUserById(2L));
-        updateVersion.setUrl(generateUrl(version.getContent()));
-        updateVersion.setFile(version.getFile());
-        return versionService.saveVersion(updateVersion);
+    public Version editFile(@CookieValue(value = "currentUser", defaultValue = "")
+            String username, @RequestBody Version version) {
+
+        Version newVersion = new Version();
+        newVersion.setNumberVersion(updateVersion(version.getFile().getIdfile()));
+        newVersion.setContent(version.getContent());
+        newVersion.setDate(new Timestamp(date.getTime()));
+        newVersion.setUser(userService.findUserByUsername(username));
+        newVersion.setUrl(generateUrl(version.getContent()));
+        newVersion.setFile(version.getFile());
+        return versionService.saveVersion(newVersion);
     }
 
     private Version createVersion(File file) {
